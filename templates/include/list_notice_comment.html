@@ -1,0 +1,58 @@
+{% load user_tags %}
+{% load staticfiles %}
+
+
+<div class="row col-xs-12">
+    <article class="col-xs-12">
+        <div class="media">
+            <div class="media-left">
+                <a href="{% url 'tmitter-mvc-views-index_user' notice.sender.username %}">
+                    <img class="media-object img-rounded" src="{{ notice.sender.face|face }}" alt="" style="width:45px;">
+                </a>
+            </div>
+            <div class="media-body">
+                <h5 class="media-heading"><a href="#" class="name" style="color:green;">{{ notice.sender.username }}</a> </h5>
+                <h5>回复<a>@{{ notice.receiver.username }}</a>: {{ notice.comment.content|safe|spacify }}</h5>
+                <p class="pull-right">
+                    <span>{{ notice.comment.pub_date|timesince }}前</span>
+                </p>
+                <br>
+                <!-- 原评论/回复  -->
+                {% if notice.comment.comment_parent %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a style="color:#5B00AE;">{{ notice.comment.comment_parent.user.username }}</a>回复
+                        {% if notice.comment.comment_parent.comment_parent %}
+                        <a style="color:#5B00AE;">{{ notice.comment.comment_parent.comment_parent.user.username }}</a>
+                        {% else %}
+                        <a style="color:#5B00AE;">{{ notice.comment.comment_parent.note.user.username }}</a>
+                        {% endif %}
+                        :{{ notice.comment.comment_parent.content|safe|spacify }}
+                    </div>
+                    <div class="panel-body">
+                        <a style="color:#5B00AE;">{{ notice.comment.note.user.username }}</a>:{{ notice.comment.note.message|safe|spacify|linebreaks }}
+                        <p class="pull-right">
+                            <a href="{% url 'tmitter-mvc-views-detail' notice.comment.note.id %}">转入原消息</a>
+                        </p>
+                    </div>
+                </div>
+                {% else %}
+                <!-- 回复消息 -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        原消息
+                    </div>
+                    <div class="panel-body">
+                        <a style="color:#5B00AE;">{{ notice.comment.note.user.username }}</a>:{{ notice.comment.note.message|safe|spacify|linebreaks }}
+                        <p class="pull-right">
+                            <a href="{% url 'tmitter-mvc-views-detail' notice.comment.note.id %}">转入原消息</a>
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <br>
+            </div>
+        </div>
+    </article>
+</div>

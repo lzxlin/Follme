@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% load staticfiles %}
+{% load user_tags %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block head_link %}
+{% endblock %}
+
+{% block  main %}
+<div class="row col-xs-12">
+    <table class="table table-striped">
+        <tbody>
+        {% for user in users %}
+            {% include 'include/userinfo.html' %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagebar">
+            {{ page_bar|safe }}              <!-- 分页条  -->
+    </div>
+</div>
+{% endblock %}

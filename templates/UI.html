@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <title>follme</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-image: url('/statics/images/home.jpg');
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+            font-family: Source Han Sans CN, Microsoft YaHei, STXihei, Arial, Helvetica, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 960px;
+            margin: 0 auto;
+        }
+
+        #nav {
+            height: 60px;
+        }
+
+        #nav .logo {
+            float: left;
+            height: 60px;
+            width: 300px;
+        }
+
+        #nav .tel {
+            float: right;
+            height: 60px;
+            line-height: 60px;
+            color: #fff;
+            opacity: 0.7;
+        }
+
+        .welcome {
+            padding-top: 110px;
+            color: #fff;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .welcome h1 {
+            font-size: 60px;
+            margin: 0 0 15px;
+            font-weight: lighter;
+        }
+
+        .welcome h2 {
+            font-size: 30px;
+            margin: 0 0 20px;
+            letter-spacing: 3px;
+            font-weight: 400;
+        }
+
+        .welcome p {
+            font-size: 24px;
+            letter-spacing: 3px;
+            margin: 0;
+            font-weight: 100;
+        }
+
+        .btn {
+            position: relative;
+            z-index: 100;
+            border-radius: 35px;
+            background: #15baf8;
+            color: #fff;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 200;
+            cursor: pointer;
+            -webkit-user-select: none;
+            overflow: hidden
+        }
+
+        .btn:before {
+            content: ' ';
+            display: block;
+            background: rgba(255, 255, 255, 0.2);
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 35px;
+            transform: scale(0, 1);
+            -webkit-transform: scale(0, 1);
+            transition: transform 0.3s ease;
+            -webkit-transition: -webkit-transform 0.3s ease;
+        }
+
+        .btn:hover:before {
+            transform: scale(1, 1);
+            -webkit-transform: scale(1, 1);
+        }
+
+        .btn:active {
+            -webkit-transform: scale(0.95);
+            transform: scale(0.95);
+        }
+
+        .btn-download {
+            width: 330px;
+            height: 70px;
+            z-index: 100;
+            border-radius: 35px;
+            margin: 120px auto 0;
+            line-height: 70px;
+            font-size: 24px;
+            font-weight: 200;
+            letter-spacing: 3px;
+        }
+
+        #footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 30px;
+            width: 100%;
+            background: #353c48;
+            z-index: 10;
+        }
+
+        .link a {
+            color: #929baa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 200;
+            margin: 0 25px;
+        }
+
+        .link a:hover {
+            color: #727986;
+        }
+
+        .sns a {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            margin: 0 10px;
+        }
+
+        .sns a:hover {
+            opacity: 0.85;
+        }
+
+        .cp {
+            text-align: center;
+            color: #727986;
+            font-size: 12px;
+            margin: 5px 0;
+            height: 20px;
+            line-height: 20px;
+        }
+
+        .intro p {
+            margin: 0;
+            line-height: 30px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div id="nav">
+    <div class="container">
+        <div class="logo"></div>
+        <div class="tel"></div>
+    </div>
+</div>
+
+<div class="welcome">
+    <h1 style="font-family:'Arial','Microsoft YaHei','黑体','宋体',sans-serif;"><strong>follow me</strong></h1>
+    <h2>记录点滴生活，美好的事情即将发生...</h2>
+
+    <p style="color:#00E3E3;">Whether you like it or not,<p>
+    <p style="color:#00E3E3;">I have added you as my friend.</p>
+
+    <div class="btn btn-download" id="index">进入Follme</div>
+</div>
+<div id="footer">
+    <div class="container">
+        <p class="cp">Copyright © 2017 - Owener By LZX&nbsp; | &nbsp;联系我 :
+            786450794@qq.com</p>
+    </div>
+</div>
+<script src="/statics/js/jquery-1.11.3.min.js"></script>
+<script>
+    $("#index").on("click", function () {
+        location.href = '/'
+    })
+</script>
+</body>
+</html>

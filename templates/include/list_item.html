@@ -1,0 +1,91 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% load user_tags %}
+{% load staticfiles %}
+<link href="{% static 'css/Pygments.css' %}" rel="stylesheet">
+<!-- Note  -->
+<div class="row col-xs-12">
+    <article class="col-xs-12">
+        <div class="media">
+            <div class="media-left">
+                <a href="{% url 'tmitter-mvc-views-index_user' item.user.username %}">
+                    <img class="media-object img-rounded" src="{{ item.user.face|face }}" alt="" style="width:60px;">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading"><a href="#" class="name" style="color:green;">{{ item.user.username }}</a> </h4>
+                {% if item.message|length > 120 %}
+                <h4>{{ item.message|safe|spacify|linebreaks|slice:":120"}}...</h4>
+                <p><a class="btn btn-link btn-lg" href="{% url 'tmitter-mvc-views-detail' item.id %}" role="button">展开...</a></p>
+                {% else %}
+                <h4>{{ item.message|safe|spacify|linebreaks }}</h4>
+                {% endif %}
+                <p class="pull-right">
+                    {% if item.addtime|timesince > 1 %}
+                    <span>{{ item.addtime|date:"Y-m-d H:i:s" }}</span>
+                    {% else %}
+                    <span>{{ item.addtime|timesince }}前</span>
+                    {% endif %}
+                    <span>,来自 <a href="#" style="color:blue;">{{ item.category.name }}</a></span>
+                </p>
+                <br>
+                <ul class="list-inline">
+                    <li><a href="{% url 'tmitter-mvc-views-detail' item.id %}"><span class="glyphicon glyphicon-comment">{{ item.comment_num }}</span></a></li>
+                    <li><a><span class="glyphicon glyphicon-eye-open">{{ item.repeat_num }}</span></a> </li>
+                    <li><a><span class="glyphicon glyphicon-thumbs-up" id="poll{{ item.id }}">{{ item.poll_num }}</span></a> </li>
+                    <li><a><span class="glyphicon glyphicon-thumbs-down" id="tread{{ item.id }}">{{ item.tread_num }}</span> </a> </li>
+                    {% if islogin %}
+                    {% ifequal userid item.user.id %}
+                    <li><a href="{% url 'tmitter-mvc-views-detail_delete' item.id %}"><span class="glyphicon glyphicon-remove"></span> </a> </li>
+                    {% endifequal %}
+                    {% endif %}
+                </ul>
+                <br>
+            </div>
+        </div>
+    </article>
+</div>
+<!-- 点赞/踩  -->
+<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+<script>
+     $(document).ready(function(){
+        var id={{ item.id }};
+        var url="/message/"+id+"/poll/";
+
+        //点赞
+         $("#poll{{ item.id }}").hover(function(){
+             $("#poll{{ item.id }}").css("color","#FF0080");
+             $("#poll{{ item.id }}").css("cursor","pointer");
+            },
+             function(){
+              $("#poll{{ item.id }}").css("color","rgb(51, 122, 183)");
+            });
+        //alert($("#poll{{ item.id }}").css('color'));
+
+        $("#poll{{ item.id }}").click(function(){
+            $.get("{% url 'poll_note' item.id %}",function(ret){
+               $("#poll{{ item.id }}").text(ret);
+                });
+         });
+
+         //踩
+         $("#tread{{ item.id }}").hover(function(){
+             $("#tread{{ item.id }}").css("color","#F75000");
+             $("#tread{{ item.id }}").css("cursor","pointer");
+            },
+             function(){
+              $("#tread{{ item.id }}").css("color","rgb(51, 122, 183)");
+            });
+
+          $("#tread{{ item.id }}").click(function(){
+            $.get("{% url 'tread_note' item.id %}",function(ret){
+               $("#tread{{ item.id }}").text(ret);
+                });
+         });
+
+     });
+
+
+</script>

@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block main %}  
+<div class="form">
+    <div class="message" style="color:Red;">{{ state.message }}</div>
+    <form action="/signin/" method="post">
+        <table cellpadding="5" cellspacing="5">
+            <tr>
+                <td class="field" style="">用户名:</td>
+                <td><input type="text" name="username" class="text" size="20" /></td>
+            </tr>
+            <tr>
+                <td class="field">密码:</td>
+                <td><input type="password" name="password" class="text" size="20" /></td>
+            </tr>
+                <tr>
+                <td class="field"></td>
+                <td><button type="submit" class="submit">登录</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

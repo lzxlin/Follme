@@ -1,0 +1,123 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% load user_tags %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block main %}
+<div class="row col-xs-12">
+    <form class="form-horizontal" role="form" action="{% url 'tmitter_mvc_views_settings' %}" method="post" enctype="multipart/form-data">
+        <!--用户名-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="{{ user.username }}" disabled>
+            </div>
+        </div>
+        <!--真实姓名-->
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">真实姓名</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="{{ user.realname }}" name="realname">
+            </div>
+        </div>
+        <!--邮箱-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">邮箱</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="{{ user.email }}" name="email">
+            </div>
+        </div>
+        <!--url-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">博客/微博</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" value="{{ user.url }}" name="url">
+            </div>
+        </div>
+        <!--头像-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">头像</label>
+            <div class="col-sm-6">
+                <img src="{{ user.face|face }}" class="control-img" alt="{% trans 'My face' %}" />
+                <input type="file" class="form-control" name="face"/>
+            </div>
+        </div>
+        <!--性别-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">性别</label>
+            {% ifequal user.sex '0' %}
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="radio" name="sex" value="0" checked>男
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="radio" name="sex" value="1">女
+            </label>
+            {% else %}
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="radio" name="sex" value="0">男
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="radio" name="sex" value="1" checked>女
+            </label>
+            {% endifequal %}
+        </div>
+        <!-- 标签  -->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">标签</label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="checkbox" value="体育" name="sign">体育
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="checkbox" value="娱乐" name="sign">娱乐
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="checkbox" value="音乐" name="sign">音乐
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="checkbox" value="旅行" name="sign">旅行
+            </label>
+            <label class="checkbox-inline col-sm-4 control-label">
+                <input type="checkbox" value="科学" name="sign">科学
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="checkbox" value="艺术" name="sign">艺术
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="checkbox" value="阅读" name="sign">阅读
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="checkbox" value="游戏" name="sign">游戏
+            </label>
+            <label class="checkbox-inline col-sm-4 control-label">
+                <input type="checkbox" value="睡觉" name="sign">睡觉
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="checkbox" value="购物" name="sign">购物
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="checkbox" value="编程" name="sign">编程
+            </label>
+            <label class="checkbox-inline col-sm-2 control-label">
+                <input type="checkbox" value="独处" name="sign">独处
+            </label>
+        </div>
+        <!--个性签名-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">个性签名</label>
+            <div class="col-sm-9">
+                <textarea class="form-control" rows="3" name="about">{{ user.about }}</textarea>
+            </div>
+        </div>
+        <!--提交-->
+        <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-10">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

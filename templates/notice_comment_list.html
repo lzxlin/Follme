@@ -1,0 +1,57 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+{% load user_tags %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block head_link %}
+{% endblock %}
+
+{% block main %}
+<div class="load-notice">
+    {% if unread_notice %}
+    {% for notice in unread_notice %}
+    {% include 'include/list_notice_comment.html' %}
+    {% endfor %}
+    {% else %}
+    <h3 class="text-center text-danger">你暂无未读的评论消息</h3>
+    <img src="{% static 'images/sorry.png' %}" style="margin-left:250px;">
+    <br><br>
+    {% endif %}
+</div>
+<div class="row col-xs-12" id="load-more-notice">
+    <div class="panel panel-default">
+    <div class="panel-body">
+        <p class="text-center text-primary">加载更多</p>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var click_time=1;
+    var ids={{ unread_id|safe }};
+    var myarray='';
+    for( id in ids){
+        myarray+=ids[id]+',';
+    }
+    $(document).ready(function(){
+       //alert(myarray);
+       $("#load-more-notice").click(function(){
+
+           click_time++;
+           //去服务器取数据
+           $.get("{% url 'load_more_data' 0 %}",{'time':click_time,'unread_id':myarray },function(data){
+                   //data=JSON.parse(data);
+                   $('.load-notice').append(data);
+              });
+           });
+
+       $("#load-more-notice").hover(function(){
+             $("#load-more-notice").css("cursor","pointer");
+            },
+             function(){
+            });
+
+    });
+</script>
+{% endblock %}

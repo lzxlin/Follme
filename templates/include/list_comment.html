@@ -1,0 +1,113 @@
+{% load user_tags %}
+{% load staticfiles %}
+
+<!-- Comment  -->
+<div class="row col-xs-12">
+    <article class="col-xs-12">
+        <div class="media">
+            <div class="media-left">
+                <a href="{% url 'tmitter-mvc-views-index_user' comment.user.username %}">
+                    <img class="media-object img-rounded" src="{{ comment.user.face|face }}" alt="" style="width:40px;">
+                </a>
+            </div>
+            <div class="media-body">
+                <h5 class="media-heading"><a href="#" class="name" style="color:orange;">{{ comment.user.username }}</a> </h5>
+                <h5>{{ comment.content|safe|spacify|linebreaks }}</h5>
+                <p class="pull-right">
+                    {% if comment.pub_date|timesince > 1 %}
+                    <span>{{ comment.pub_date|date:"Y-m-d H:i:s" }}</span>
+                    {% else %}
+                    <span>{{ comment.pub_date|timesince }}前</span>
+                    {% endif %}
+                </p>
+                <br>
+                <ul class="list-inline">
+                    <li><a><span class="glyphicon glyphicon glyphicon-heart" id="like{{ comment.id }}">{{ comment.poll_num }}</span></a> </li>
+                    <li><a><span class="glyphicon glyphicon-comment" id="comment{{ comment.id }}">{{ comment.reply_num }}</span></a></li>
+                    {% if islogin %}
+                    {% ifequal userid comment.user.id %}
+                    <li><a href="{% url 'tmitter-mvc-views-comment_delete' comment.id page_index %}"><span class="glyphicon glyphicon-remove"></span> </a> </li>
+                    {% endifequal %}
+                    {% endif %}
+                </ul>
+                <form class="col-xs-12" role="form" name="{{ comment.id }}" style="display:none;" action="{% url 'comment_reply'  comment.id %}" method="post">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="请输入回复内容" name="content_reply">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">回复</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!--回复-->
+                {% for root,childs in comments_tree.items %}
+                {% ifequal root comment %}
+                {% for child in childs %}
+                    {% include 'include/list_reply.html' %}
+                {% endfor %}
+                {% endifequal %}
+                {% endfor %}
+                <br>
+            </div>
+        </div>
+    </article>
+    <br>
+</div>
+
+<!-- 回复模态框  -->
+<div class="modal fade" id="modal{{ child.id }}" tabindex="-1" role="dialog" aria-labelledby="回复" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">回复</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" placeholder="请输入回复内容" name="content_reply">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">回复</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--弹出回复框  -->
+<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+<script>
+    $(document).ready(function(){
+        //弹出回复框
+        $("#comment{{ comment.id }}").click(function(){
+            $("form[name='{{ comment.id }}']").fadeToggle("slow");
+            });
+
+         //悬浮变手指
+         $("#comment{{ comment.id }}").hover(function(){
+             //$("#comment{{ comment.id }}").css("color","#F75000");
+             $("#comment{{ comment.id }}").css("cursor","pointer");
+            },
+             function(){
+              $("#comment{{ comment.id }}").css("color","rgb(51, 122, 183)");
+            });
+
+          //喜欢
+          $("#like{{ comment.id }}").hover(function(){
+             $("#like{{ comment.id }}").css("color","#F00078");
+             $("#like{{ comment.id }}").css("cursor","pointer");
+            },
+             function(){
+              $("#like{{ comment.id }}").css("color","rgb(51, 122, 183)");
+            });
+
+          $("#like{{ comment.id }}").click(function(){
+            $.get("{% url 'like_comment' comment.id %}",function(ret){
+               $("#like{{ comment.id }}").text(ret);
+                });
+          });
+     });
+</script>

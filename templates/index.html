@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% load user_tags %}
+{% load staticfiles %}
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block head_link %}
+{% if user %}
+<link rel="alternate" type="application/rss+xml" title="{{ user.realname }} 最近信息" href="/user/feed/rss/recent/{{ user.username }}" />
+{% else %}
+<link rel="alternate" type="application/rss+xml" title="{% trans 'Recent message of eveyone' %}" href="/feed/rss/recent/" />
+{% endif %}
+{% endblock %}
+<!--导航栏 -->
+{% block myhome %}
+{% if login_user %}
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我的 <span class="caret"></span></a>
+    <ul class="dropdown-menu" aria-labelledby="about-us">
+        <li><a href="/user/{{ username }}">我的主页</a></li>
+        <li><a href="/settings">编辑</a></li>
+        <li><a href="/myfriends">好友</a></li>
+    </ul>
+</li>
+{% else %}
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" contenteditable="false">我的 <span class="caret"></span></a>
+</li>
+{% endif %}
+{% endblock %}
+
+<!-- 导航中的登录注册-->
+{% block sign %}
+{% if login_user %}
+<form class="navbar-form navbar-right form-inline">
+    <div class="form-group">
+        <span class="label">你已经登录, </span>
+        <span><a href="#" class="" style="color:blue;">{{ login_user.username }}</a></span>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-link" href="/signout/" role="button">退出登录</a>
+    </div>
+</form>
+{% else %}
+<form class="navbar-form navbar-right form-inline" action="/signin/" method="post">
+    <div class="form-group">
+        <label class="label label-warning">{{ state.message }}</label>
+    </div>
+    <div class="form-group">
+        <label class="sr-only" for="emailAddress">Email address</label>
+        <input type="text" class="form-control" id="emailAddress" placeholder="Username" name="username">
+    </div>
+    <div class="form-group">
+        <label class="sr-only" for="pwd">Password</label>
+        <input type="password" class="form-control" id="pwd" placeholder="Password" name="password">
+    </div>
+    <button type="submit" class="btn btn-primary">登录</button>
+    <a class="btn btn-default" href="/signup" role="button">注册</a>
+</form>
+{% endif %}
+{% endblock %}
+
+<!-- 个人信息 -->
+{% block myinfo %}
+{% if user %}
+<!-- 个人信息  -->
+<div class="media">
+    <div class="media-left" >
+        <img class='media-object' src="{% static 'images/hi.png' %}"/>
+    </div>
+    <a class="media-body" href="{% url 'tmitter-mvc-views-index_user' user.username %}">
+        <img class='media-object img-circle' src="{{ user.face|face }}"  />
+    </a>
+</div>
+<div>
+    <table class="table">
+        <caption><br></caption>
+        <tbody>
+        <tr class="active">
+            <td>用户名</td>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr class="success">
+            <td>邮箱</td>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr class="warning">
+            <td>标签</td>
+            <td>{{ user.sign }}</td>
+        </tr>
+        <tr class="danger">
+            <td>RP值</td>
+            <td>{{ user.grade }}</td>
+        </tr>
+        <tr class="success">
+            <td>好友数</td>
+            <td>{{ user.friend_num }}</td>
+        </tr>
+        <tr class="active">
+            <td>消息数</td>
+            <td>{{ user.note_num }}</td>
+        </tr>
+        <tr class="info">
+            <td>个性签名</td>
+            <td>{{ user.about }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}
+
+<!--好友列表 -->
+{% block friendlist %}
+{% if user %}
+        <div class="friends">
+        <div class="list">
+        {% for friend in friends %}
+        <a href="{% url 'tmitter-mvc-views-index_user' friend.username %}" title="{{ friend.username }}"><img src="{{ friend.face|face }}" alt="{{ friend.realname }}" class="face" /></a>
+        {% endfor %}
+        </div>
+        </div>
+{% endif %}
+{% endblock %}
+
+<!-- 主消息 -->
+{% block main %}
+    {% if user %}
+    {% else %}
+    {% include 'include/postform.html' %}
+    {% endif %}
+    {% if islogin %}
+        {% if self_home %}
+            {% include 'include/postform.html' %}
+        {% endif %}
+    {% endif %}
+
+    <br/><br/>
+    <!-- note列表  -->
+    {% for item in notes %}
+        {% include  'include/list_item.html' %}
+    {% endfor %}
+    <div class="list">
+
+        <div class="pagebar">
+            {{ page_bar|safe }}             <!-- 分页条  -->
+            {% if user %}
+                <a href="/user/feed/rss/recent/{{ user.username }}" alt="{% trans 'Subscription' %}"></a>
+            {% else %}
+                 <a href="/feed/rss/recent/" alt="{% trans 'Subscription' %}">
+            {% endif %}
+           </a>
+        </div>
+    </div>
+
+{% endblock %}
+
+<!-- 通知栏-->
+{% block mynotice %}
+{% if islogin %}
+<a href="{% url 'notice_comment_list' login_user.username %}" class="list-group-item" style="">评论我的 <img src="{% static 'images/comment.png' %}">
+    {% if notice_comment %}
+    <span class="badge" style="background-color:green;">{{ notice_comment }}</span>
+    {% endif %}
+</a>
+<a href="{% url 'notice_poll_list' login_user.username %}" class="list-group-item" style="">赞我的消息 <img src="{% static 'images/smile.png' %}">
+    {% if notice_poll %}
+    <span class="badge" style="background-color:green;">{{ notice_poll }}</span>
+    {% endif %}
+</a>
+<a href="{% url 'notice_tread_list' login_user.username %}" class="list-group-item" style="">踩我的消息 <img src="{% static 'images/大哭.png' %}">
+    {% if notice_tread %}
+    <span class="badge" style="background-color:green;">{{ notice_tread }}</span>
+    {% endif %}
+</a>
+<a href="{% url 'notice_like_list' login_user.username %}" class="list-group-item" style="">喜欢我的评论 <img src="{% static 'images/shy.png' %}">
+    {% if notice_like %}
+    <span class="badge" style="background-color:green;">{{ notice_like }}</span>
+    {% endif %}
+</a>
+<a href="#" class="list-group-item" style="">@我的 <img src="{% static 'images/at.png' %}">
+    <span class="badge" style="background-color:green;">New</span>
+</a>
+{% else %}
+<a href="#" class="list-group-item" style="">评论我的 <img src="{% static 'images/comment.png' %}">
+</a>
+<a href="#" class="list-group-item" style="">赞我的消息 <img src="{% static 'images/smile.png' %}">
+</a>
+<a href="#" class="list-group-item" style="">踩我的消息 <img src="{% static 'images/大哭.png' %}">
+</a>
+<a href="#" class="list-group-item" style="">喜欢我的评论 <img src="{% static 'images/at.png' %}">
+</a>
+<a href="#" class="list-group-item" style="">@我的 <img src="{% static 'images/at.png' %}">
+    <span class="badge" style="background-color:green;">New</span>
+</a>
+{% endif %}
+{% endblock %}
+
+{% block rpValue %}
+   {% if logger %}
+    {% for log in logger %}
+      {% if log %}
+      <p style="color:#FF2D2D;"><span class="glyphicon glyphicon-leaf"></span>{{ log }}</p>
+      {% endif %}
+    {% endfor %}
+    {% endif %}
+{% endblock %}
+

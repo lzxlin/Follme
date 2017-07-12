@@ -1,0 +1,18 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% load staticfiles %}
+<!-- 消息框 -->
+<form role="form" action="/" method="post" class="col-xs-12">
+    <div class="form-group">
+        <h4 style="color:green;">
+            <span class="glyphicon glyphicon-eye-open"><strong>美好的事情正在发生......</strong></span></h4>
+        <div>
+            <textarea class="form-control" rows="4" name="message" placeholder="what happen now?"></textarea>
+        </div>
+    </div>
+    <div class="form-group pull-right">
+        <button type="submit" class="btn btn-success">发布</button>
+    </div>
+</form>

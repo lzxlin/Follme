@@ -1,0 +1,38 @@
+{% load i18n %}
+<!-- {% get_current_language as LANGUAGE_CODE %}  -->
+<!-- {% get_available_languages as LANGUAGES %} -->
+<!-- {% get_current_language_bidi as LANGUAGE_BIDI %} -->
+{% load user_tags %}
+{% load common_tags %}
+{% load staticfiles %}
+<!-- 显示朋友头像  -->
+
+<tr>
+	<th>
+		<a href="{% url 'tmitter-mvc-views-index_user' user.username %}">
+			<img class="media-object img-rounded" src="{{ user.face|face }}" alt="" >
+		</a>
+	</th>
+	<th>
+		<h3><a href="#" class="name" style="color:#02DF82;">{{ user.username }}</a></h3>
+	</th>
+	<th>
+		{% if islogin %}
+		{% if user|in_list:login_user_friend_list %}   <!-- 判断是否已经是好友 -->
+		<!-- 解除朋友关系 -->
+		<span>
+			<a href="{% url 'tmitter-mvc-views-friend_remove' user.username %}" title="{% trans 'Remove friend' %} {{ user.username }}">
+				<img src="{% static 'images/deletefriend.png' %}">
+			</a>
+		</span>
+		<!--- 添加朋友关系  -->
+		{% else %}
+		<span>
+			<a href="{% url 'tmitter-mvc-views-friend_add' user.username %}" title="{{ user.username }}">
+				<img src="{% static 'images/addfriend.png' %}">
+			</a>
+		</span>
+		{% endif %}
+		{% endif %}
+	</th>
+</tr>

@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% load staticfiles %}
+{% load user_tags %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block head_link %}
+{% endblock %}
+
+{% block  main %}
+<div class="row col-xs-12">
+    <table class="table table-striped">
+        <caption>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="{% static 'images/亚军.png' %}"/> <span style="font-size:20px;color:orange;"><strong>{{ users.1.username }}</strong></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="{% static 'images/冠军.png' %}"/> <span style="font-size:25px;color:red;"><strong>{{ users.0.username }}</strong></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="{% static 'images/季军.png' %}"/> <span style="font-size:20px;color:#0072E3;"><strong>{{ users.2.username }}</strong></span>
+        </caption>
+        <tbody>
+        {% for user in users %}
+            {% include 'include/rankinfo.html' %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

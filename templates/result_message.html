@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+{% load i18n %}
+
+{% block title %}{{ page_title }}{% endblock %}
+{% block  main %}
+<div class="message">
+    <h3 style="color:green;">{{ message }}</h3>
+</div>
+<div>
+    <a class="btn btn-link btn-lg" href="{{ go_back_url }}" role="button">
+        <span class="glyphicon glyphicon-hand-right"></span> 返回
+    </a>
+</div>
+{% endblock %}

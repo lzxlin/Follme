@@ -1,0 +1,52 @@
+{% load user_tags %}
+{% load staticfiles %}
+
+ <h5 class="media-heading" id="child{{ child.id }}" data-toggle="modal" data-target="#modal{{ child.id }}">
+     <a class="name" style="color:#8600FF;">{{ child.user.username }}</a>
+     {% ifequal child.user.username child.comment_parent.user.username %}
+     {% else %}
+     回复<a> {{ child.comment_parent.user.username }}</a>
+     {% endifequal %}
+     : {{ child.content|safe|spacify }}
+                    <!-- <a class="pull-right"><span class="glyphicon glyphicon-comment" id="comment{{ child.id }}">{{ child.reply_num }}</span></a> -->
+ </h5>
+
+
+
+
+
+
+<!-- 回复模态框  -->
+<div class="modal fade" id="modal{{ child.id }}" tabindex="-1" role="dialog" aria-labelledby="回复" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">回复@{{ child.user.username }}</h4>
+            </div>
+            <form role="form" method="post" action="{% url 'comment_reply'  child.id %}">
+                <div class="modal-body">
+                    <input type="text" class="form-control" placeholder="请输入回复内容" name="content_reply">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">回复</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!--弹出回复框  -->
+<script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+
+          $("#child{{ child.id }}").hover(function(){
+              $("#child{{ child.id }}").css("cursor","pointer");
+              },
+              function(){
+              });
+   });
+</script>

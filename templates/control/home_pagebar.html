@@ -1,0 +1,35 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as LANGUAGES %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+<!-- 首页分页条-->
+<div class="center-block">
+    <ul class="pager">
+        <!-- 如果本页不是首页，则显示到首页的连接  -->
+        {% ifequal page_index 1 %}
+        <li class="disabled"><a href="#">首页</a></li>
+        {% else %}
+        <li ><a href="{% url 'tmitter-mvc-views-index_page' 1 %}">首页</a></li>
+        {% endifequal %}
+
+        {% if  not has_prev %}
+        <li class="disabled"><a href="#">&larr;前一页</a> </li>
+        {% else %}
+        <li><a href="{% url 'tmitter-mvc-views-index_page' page_prev %}">&larr;前一页</a> </li>
+        {% endif %}
+
+        <li>{{ page_index }}/{{ page_count }}</li>
+
+        {% if not has_next %}
+        <li class="disabled"><a href="#">下一页&rarr;</a> </li>
+        {% else %}
+        <li><a href="{% url 'tmitter-mvc-views-index_page' page_next %}">下一页&rarr;</a> </li>
+        {% endif %}
+
+        {% ifequal page_index page_count %}
+        <li class="disabled"><a href="#">尾页</a> </li>
+        {% else %}
+        <li><a href="{% url 'tmitter-mvc-views-index_page' page_count %}">尾页</a> </li>
+        {% endifequal %}
+    </ul>
+</div>
